@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 // original code to permutate letters was taken from stack overflow with playground examples
@@ -45,10 +46,15 @@ func Sum(anArray []int) int {
 }
 
 // goal is group combinations that results in the same sum
-func main() {
+// we just print the map with nested arrays
+// Cool golang feature: golang provides string debug output for native types like maps and slices
+// Actually dealing with slices is much easier then using list.List for example as a result container
+// for example you can not range over a list.List
+// Why are lists used infrequently in Go? -> https://stackoverflow.com/questions/21326109/why-are-lists-used-infrequently-in-go
+func GenerateComboSums(sourceArray []int, maxLength int) map[int][][]int {
 	result := make(map[int][][]int)
 	// Cool feature of golang: here we range a channel output and when channel closes, range ends and for loop is completed
-	for combination := range GenerateCombinations([]int{2, 3, 5, 7, 9, 10}, 2) {
+	for combination := range GenerateCombinations(sourceArray, maxLength) {
 		if len(combination) < 2 {
 			continue
 		}
@@ -58,10 +64,29 @@ func main() {
 		result[sumOfArrayElements] = newListOfCombinations                     // replace old list of combinations with new list of combinations within map
 		fmt.Println(combination)                                               // list a processed combination
 	} // END range loop
-	// we just print the map with nested arrays
-	// Cool golang feature: golang provides string debug output for native types like maps and slices
-	// Actually dealing with slices is much easier then using list.List for example as a result container
-	// for example you can not range over a list.List
-	// Why are lists used infrequently in Go? -> https://stackoverflow.com/questions/21326109/why-are-lists-used-infrequently-in-go
+	return result
+}
+
+func main() {
+	result := GenerateComboSums([]int{2, 3, 5, 7, 9, 10, 1000}, 2)
 	fmt.Println("Done!", result)
+	keys := make([]int, 0)
+	index := 0
+	fmt.Println("results")
+	for k, v := range result {
+		keys = append(keys, k)
+		index++
+		fmt.Println(k, " ", v)
+	}
+	sort.Ints(keys)
+	fmt.Println("Sorted results keys:", keys)
+	for i := 0; i < len(keys); i++ {
+		key := keys[i]
+		value, ok := result[key]
+		if ok {
+			fmt.Println(key, " ", value)
+		} else {
+			fmt.Println(key, "[no result]")
+		}
+	}
 }
