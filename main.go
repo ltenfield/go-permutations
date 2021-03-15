@@ -72,14 +72,12 @@ func GenerateComboSums(sourceArray []int, maxLength int) map[int][][]int {
 
 func main() {
 	result := GenerateComboSums([]int{2, 3, 5, 7, 9, 10, 1000}, 2)
-	fmt.Println("Done!", result)
+	//fmt.Println("Done!", result)
 	keys := make([]int, 0)
-	index := 0
-	fmt.Println("results")
-	for k, v := range result {
+	//fmt.Println("results")
+	for k, _ := range result {
 		keys = append(keys, k)
-		index++
-		fmt.Println(k, " ", v)
+		//fmt.Println(k, " ", v)
 	}
 	sort.Ints(keys)
 	fmt.Println("Sorted results keys:", keys)
