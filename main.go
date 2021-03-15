@@ -53,6 +53,9 @@ func Sum(anArray []int) int {
 // Why are lists used infrequently in Go? -> https://stackoverflow.com/questions/21326109/why-are-lists-used-infrequently-in-go
 func GenerateComboSums(sourceArray []int, maxLength int) map[int][][]int {
 	result := make(map[int][][]int)
+	if sourceArray == nil || len(sourceArray) < 1 || maxLength < 1 {
+		return result // no input -> no output
+	}
 	// Cool feature of golang: here we range a channel output and when channel closes, range ends and for loop is completed
 	for combination := range GenerateCombinations(sourceArray, maxLength) {
 		if len(combination) < 2 {
@@ -62,7 +65,7 @@ func GenerateComboSums(sourceArray []int, maxLength int) map[int][][]int {
 		listOfCombinationsForSum := result[sumOfArrayElements]                 // sumOfArrayElements becomes a map key
 		newListOfCombinations := append(listOfCombinationsForSum, combination) // add a new combination to list of combinations
 		result[sumOfArrayElements] = newListOfCombinations                     // replace old list of combinations with new list of combinations within map
-		fmt.Println(combination)                                               // list a processed combination
+		//fmt.Println(combination)                                               // list a processed combination
 	} // END range loop
 	return result
 }
